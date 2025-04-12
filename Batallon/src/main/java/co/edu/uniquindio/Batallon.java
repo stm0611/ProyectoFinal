@@ -10,7 +10,7 @@ public class Batallon {
     private LinkedList<VehiculoApoyo> listVehiculosApoyo;
     private LinkedList<VehiculoBlindado> listVehiculosBlindados;
     private LinkedList<VehiculoTransporteTropa> listVehiculosTransporteTropa;
-
+    private static LinkedList<Soldado> personal = Mision.getPersonal();
     private LinkedList<Mision> listMisiones;
 
     public Batallon(String nombre, String id) {
@@ -34,7 +34,26 @@ public class Batallon {
 
         return flag;
     }
+    public boolean registarMision (LocalDate fechaMision, String ubicacioMision, LinkedList listPersonal, String idVehiculo){
 
+        boolean flag = false;
+        
+        String idMisionNueva = String.valueOf(listMisiones.size()+1);
+        Mision newMision = new Mision (idMisionNueva, fechaMision, ubicacioMision);
+        newMision.setPersonal(listPersonal);
+
+        for(VehiculoTransporteTropa vehiculo : listVehiculosTransporteTropa){
+            if(vehiculo.getId().equals(idVehiculo)){
+                newMision.setTheVehiculo(vehiculo);
+                LinkedList<Mision> listMisionesAux = vehiculo.getListMisiones();
+                listMisionesAux.add(newMision);
+                vehiculo.setListMisiones(listMisionesAux);
+            }
+        }
+        listMisiones.add(newMision);
+
+        return flag;
+    }
     public LinkedList<Vehiculo> obtenerVehiculosCantMisiones() {
         LinkedList<Vehiculo> vehiculosMisionesCompletadas = new LinkedList<>();
 
@@ -58,5 +77,28 @@ public class Batallon {
         }
 
         return vehiculosMisionesCompletadas;
+    }
+
+    public int encontrarPosicionValida(){
+        for (int i = 0; i < personal.size();i++){
+            if(personal.get(i)== null){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    public boolean crearSoldado(Soldado nuevoSoldado){
+        int posicion = encontrarPosicionValida();
+        if(posicion != -1){
+            personal.set(posicion)= nuevoSoldado;
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public boolean eliminarsoladado(){
+
     }
 }
