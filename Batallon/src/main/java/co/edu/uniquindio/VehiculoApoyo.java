@@ -9,6 +9,7 @@ public class VehiculoApoyo extends Vehiculo {
         this.tipoFuncion = tipoFuncion;
     }
 
+
     @Override
     public void desplazar() {
 

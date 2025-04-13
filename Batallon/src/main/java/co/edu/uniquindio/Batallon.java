@@ -1,6 +1,7 @@
 package co.edu.uniquindio;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 public class Batallon {
@@ -23,8 +24,12 @@ public class Batallon {
         this.listMisiones = new LinkedList<>();
     }
 
+    public static void setPersonal(LinkedList<Soldado> nuevoPersonal) {
+        personal = nuevoPersonal;
+    }
+
     public boolean registrarMision(LocalDate fechaMision, String ubicacionMision,
-                                   LinkedList listPersonal, String idVehiculomision){
+                                   LinkedList listPersonal, String idVehiculoMision){
         boolean flag = false;
 
         //Convertir de int a string
@@ -88,17 +93,91 @@ public class Batallon {
         return -1;
     }
 
-
-    public boolean crearSoldado(Soldado nuevoSoldado){
+    public boolean crearSoldado(Soldado nuevoSoldado) {
         int posicion = encontrarPosicionValida();
-        if(posicion != -1){
-            personal.set(posicion)= nuevoSoldado;
+        if (posicion != -1) {
+            personal.set(posicion, nuevoSoldado);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
-    public boolean eliminarsoladado(){
-
+    public Soldado buscarSoldadoPorId(String cedulaBuscada) {
+        for (Soldado soldado : personal) {
+            if (soldado != null && soldado.getCedula().equals(cedulaBuscada)) {
+                return soldado;
+            }
+        }
+        return null; // No se encontró el soldado
     }
+    public double calcularEdadPromedio() {
+        double sumaEdades = 0;
+        int cantidadSoldados = 0;
+
+        for (Soldado soldado : personal) {
+            if (soldado != null) {
+                sumaEdades += soldado.getEdad();
+                cantidadSoldados++;
+            }
+        }
+        if (cantidadSoldados == 0) {
+            return 0; // Retornar 0 si no hay soldados
+        }
+        return sumaEdades / cantidadSoldados; // Calcular promedio
+    }
+
+    public LinkedList<Soldado> obtenerSoldadosDisponiblesPorRango(Rango rango) {
+        LinkedList<Soldado> soldadosDisponibles = new LinkedList<>();
+
+        // Recorrer el personal y agregar los soldados disponibles con el rango especificado
+        for (Soldado soldado : personal) {
+            if (soldado != null && soldado.isDisponibilidad() && soldado.getRango() == rango) {
+                soldadosDisponibles.add(soldado);
+            }
+        }
+        return soldadosDisponibles;
+    }
+
+    public LinkedList<Soldado> buscarSoldadoPorEspecialidad(Especialidad especialidad) {
+        LinkedList<Soldado> soldadosPorEspecialidad = new LinkedList<>();
+
+        // Recorrer el personal y agregar los soldados con la especialidad especificada
+        for (Soldado soldado : personal) {
+            if (soldado != null && soldado.getEspecialidad() == especialidad) {
+                soldadosPorEspecialidad.add(soldado);
+            }
+        }
+        return soldadosPorEspecialidad;
+    }
+
+    public Vehiculo obtenerVehiculoConMasMisionesCompletadas() {
+        Vehiculo vehiculoConMasMisiones = null;
+        int maxMisiones = -1;
+
+        // Recorrer los vehículos de cada tipo y encontrar el que tiene más misiones completadas
+        for (VehiculoApoyo vehiculo : listVehiculosApoyo) {
+            if (vehiculo.getMisionesCompletadas() > maxMisiones) {
+                maxMisiones = vehiculo.getMisionesCompletadas();
+                vehiculoConMasMisiones = vehiculo;
+            }
+        }
+
+        for (VehiculoBlindado vehiculo : listVehiculosBlindados) {
+            if (vehiculo.getMisionesCompletadas() > maxMisiones) {
+                maxMisiones = vehiculo.getMisionesCompletadas();
+                vehiculoConMasMisiones = vehiculo;
+            }
+        }
+
+        for (VehiculoTransporteTropa vehiculo : listVehiculosTransporteTropa) {
+            if (vehiculo.getMisionesCompletadas() > maxMisiones) {
+                maxMisiones = vehiculo.getMisionesCompletadas();
+                vehiculoConMasMisiones = vehiculo;
+            }
+        }
+
+        return vehiculoConMasMisiones;
+    }
+
 }
+
