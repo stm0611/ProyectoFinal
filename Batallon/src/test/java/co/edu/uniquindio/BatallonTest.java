@@ -2,7 +2,7 @@ package co.edu.uniquindio;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.util.Map;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -186,7 +186,7 @@ class BatallonTest {
 
         // Crear lista de personal para la misión
         LinkedList<Soldado> personal = new LinkedList<>();
-        personal.add(new Soldado("Carlos", "999", 30, Especialidad.INGENIERIA, Rango.TENIENTE, true));
+        personal.add(new Soldado("Carlos", "999", 30, Especialidad.MEDICO, Rango.TENIENTE, true));
 
         // Registrar misión
         boolean resultado = batallon.registrarMision(
@@ -226,11 +226,14 @@ class BatallonTest {
         Batallon b = new Batallon("Batallon A", "001");
         VehiculoBlindado v1 = new VehiculoBlindado("1", "BlindadoA", 2020, 80000, EstadoOperativo.DISPONIBLE, 5);
         VehiculoApoyo v2 = new VehiculoApoyo("2", "ApoyoB", 2022, 10000, EstadoOperativo.DISPONIBLE, TipoFuncion.LOGISTICA);
-        Mision misionFutura = new Mision("1", LocalDate.now().plusDays(1), "ZonaX");
+        LocalDate fecha = LocalDate.now().plusDays(1);
+        Mision misionFutura = new Mision("1", fecha, fecha, fecha, "ZonaX");
+
         v2.getListMisiones().add(misionFutura);
 
-        b.listVehiculosBlindados.add(v1);
-        b.listVehiculosApoyo.add(v2);
+        b.getListVehiculosBlindados().add(v1);
+        b.getListVehiculosApoyo().add(v2);
+
 
         Map<EstadoOperativo, Long> resumen = b.actualizarEstadoVehiculos(50000);
 
@@ -238,20 +241,6 @@ class BatallonTest {
         assertEquals(1, resumen.get(EstadoOperativo.EN_MISION));
     }
 
-    @Test
-    void testAsignarSoldadoAMision() {
-        Batallon b = new Batallon("Batallon Test", "003");
-        Soldado s1 = new Soldado("Pedro", "123", 25, Especialidad.INFANTERIA, Rango.SARGENTO, true);
-        Mision m = new Mision("10", LocalDate.now(), "Montaña");
-        b.listMisiones.add(m);
-
-        boolean result = b.asignarSoldadoAMision("10", s1);
-
-        assertTrue(result);
-        assertFalse(s1.isDisponibilidad());
-        assertEquals(1, m.getPersona  l().size());
-    }
-    
 }
 
 

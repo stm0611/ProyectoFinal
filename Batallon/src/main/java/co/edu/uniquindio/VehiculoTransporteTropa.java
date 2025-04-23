@@ -9,10 +9,6 @@ public class VehiculoTransporteTropa extends Vehiculo {
         this.capacidadSoldados = capacidadSoldados;
     }
 
-    public VehiculoTransporteTropa(String t1, int i) {
-        super();
-    }
-
     @Override
     public void desplazar() {
         System.out.println("El vehiculo de tropas se esta moviendo");

@@ -25,9 +25,21 @@ class MisionTest {
 
         mision.finalizarMision();
 
-        assertTrue(soldado1.isDisponibilidad(), "El soldado 1 debería estar disponible");
-        assertTrue(soldado2.isDisponibilidad(), "El soldado 2 debería estar disponible");
+        assertTrue(soldado1.getDisponibilidad(), "El soldado 1 debería estar disponible");
+        assertTrue(soldado2.getDisponibilidad(), "El soldado 2 debería estar disponible");
         assertEquals(2, mision.getPersonal().size(), "La lista de personal debe mantener sus elementos");
+    }
+    @Test
+    void testAsignarSoldadoAMision() {
+        Soldado s1 = new Soldado("Pedro", "123", 25, Especialidad.MEDICO, Rango.SARGENTO, true);  // disponible
+        LocalDate fecha = LocalDate.now();
+        Mision m = new Mision("10", fecha, fecha, fecha, "Montaña");
+
+        boolean result = m.asignarSoldadoAMision(s1);  // ← Aquí llamas directamente desde la misión
+
+        assertTrue(result);
+        assertFalse(s1.getDisponibilidad());  // El soldado ahora está no disponible
+        assertEquals(1, m.getPersonal().size());  // La misión tiene un soldado
     }
 
 }

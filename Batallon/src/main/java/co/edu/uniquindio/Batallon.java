@@ -4,6 +4,11 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Comparator;
+
 
 public class Batallon {
     private String nombre;
@@ -32,12 +37,13 @@ public class Batallon {
     }
 
 //Metodo Registrar mision
-    public boolean registrarMision (LocalDate fechaMision, String ubicacioMision, LinkedList listPersonal, String idVehiculo){
+    public boolean registrarMision (LocalDate fechaMision, String ubicacionMision, LinkedList listPersonal, String idVehiculo){
 
         boolean flag = false;
 
         String idMisionNueva = String.valueOf(listMisiones.size()+1);
-        Mision newMision = new Mision (idMisionNueva, fechaMision, ubicacioMision);
+        Mision newMision = new Mision(idMisionNueva, fechaMision, fechaMision, fechaMision.plusDays(3), ubicacionMision);
+
         newMision.setPersonal(listPersonal);
 
         for(VehiculoTransporteTropa vehiculo : listVehiculosTransporteTropa){
@@ -51,6 +57,10 @@ public class Batallon {
         }
         listMisiones.add(newMision);
         return flag;
+    }
+
+    public void agregarVehiculoTransporteTropa(VehiculoTransporteTropa v) {
+        listVehiculosTransporteTropa.add(v);
     }
 
 //Metodo buscar vehiculos por año de fabricacion
@@ -92,17 +102,8 @@ public class Batallon {
                 .collect(Collectors.groupingBy(Vehiculo::getEstadoOperativo, Collectors.counting()));
     }
 
-// Metodo Asignar soldado a una misión
-    public boolean asignarSoldadoAMision(String idMision, Soldado soldado) {
-        for (Mision mision : listMisiones) {
-            if (mision.getId().equals(idMision)) {
-                if (soldado.isDisponibilidad()) {
-                    soldado.setDisponibilidad(false);
-                    return mision.agregarSoldadoMision(soldado);
-                }
-            }
-        }
-        return false;
+    public void agregarVehiculoApoyo(VehiculoApoyo v) {
+        listVehiculosApoyo.add(v);
     }
 
     public LinkedList<Vehiculo> obtenerVehiculosCantMisiones() {
@@ -177,7 +178,7 @@ public class Batallon {
 
         // Recorrer el personal y agregar los soldados disponibles con el rango especificado
         for (Soldado soldado : personal) {
-            if (soldado != null && soldado.isDisponibilidad() && soldado.getRango() == rango) {
+            if (soldado != null && soldado.getDisponibilidad() && soldado.getRango() == rango) {
                 soldadosDisponibles.add(soldado);
             }
         }

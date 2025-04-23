@@ -22,8 +22,8 @@ import java.util.LinkedList;
             this.personal = new LinkedList<>();
         }
 
-        public boolean agregarSoldadoMision(Soldado soldado) {
-            if (soldado.isDisponibilidad()) {
+        public boolean asignarSoldadoAMision(Soldado soldado) {
+            if (soldado.getDisponibilidad()) {
                 personal.add(soldado);
                 soldado.setDisponibilidad(false);
                 return true;

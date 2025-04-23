@@ -14,7 +14,7 @@ public class Soldado {
         this.edad = edad;
         this.especialidad = especialidad;
         this.rango = rango;
-        this.disponibilidad = false;
+        this.disponibilidad = disponibilidad;
     }
 
     public String getNombre() {
@@ -57,7 +57,7 @@ public class Soldado {
         this.rango = rango;
     }
 
-    public boolean isDisponibilidad() {
+    public boolean getDisponibilidad() {
         return disponibilidad;
     }
 
